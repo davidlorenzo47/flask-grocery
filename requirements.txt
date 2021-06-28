@@ -24,7 +24,6 @@ google-pasta==0.2.0
 googletrans==3.0.0
 greenlet==1.1.0
 grpcio==1.34.1
-gTTS==2.2.2
 gunicorn==20.1.0
 h11==0.9.0
 h2==3.2.0
@@ -38,16 +37,12 @@ idna==2.10
 itsdangerous==2.0.1
 Jinja2==3.0.1
 joblib==1.0.1
-keras-nightly==2.5.0.dev2021032900
-Keras-Preprocessing==1.1.2
 Markdown==3.3.4
 MarkupSafe==2.0.1
 networkx==2.5.1
-numpy==1.19.5
 oauthlib==3.1.0
 opt-einsum==3.3.0
 Pillow==8.2.0
-pipreqs==0.4.10
 playsound==1.2.2
 protobuf==3.17.0
 pyasn1==0.4.8
@@ -58,7 +53,6 @@ requests-oauthlib==1.3.0
 rfc3986==1.4.0
 rsa==4.7.2
 six==1.15.0
-sklearn==0.0
 sniffio==1.2.0
 SQLAlchemy==1.4.18
 SVC==0.1
