@@ -1,0 +1,90 @@
+{%extends 'base.html'%}
+
+{%block title%}
+Market Page
+{%endblock%}
+{% block content%}
+<div class="row" style="margin-top:20px; margin-left:20px">
+    <div class="col-8">
+        <h2>{{uname}}'s List</h2>
+        <br>
+       <table class="table table-hover table-dark">
+          <thead>
+             <tr>
+                <!-- Your Columns HERE -->
+                <th scope="col">Sr.</th>
+                <th scope="col">Name</th>
+                
+                <th scope="col">Price</th>
+                <th scope="col">Options</th>
+             </tr>
+          </thead>
+          <tbody>
+             <!-- Your rows inside the table HERE: -->
+			 {% set c=1%}
+             {% for item in items %}
+			 
+             {% include 'includes/items_modals.html' %}
+             <tr>
+                <td>{{loop.index}}</td>
+				 
+                <td>{{ item.name }}</td>
+                
+                <td>{{ item.price }} Rs.</td>
+                <td>
+                   
+                   <button class="btn btn-outline btn-success" data-toggle="modal" data-target="#Modal-PurchaseConfirm-{{ item.id }}">Add to cart</button>
+                </td>
+             </tr>
+			
+             {% endfor %}
+          </tbody>
+       </table>
+    </div>
+    <div class="col-4">
+      <h2>Owned Items</h2>
+      <p>Click on sell item to put an item back on the Market</p>
+      <br>
+      {% if owned_items.count()>0 %}
+      <div class="row">
+         {% for owned_item in owned_items %}
+         {% include 'includes/owned_items_modals.html' %}
+           <div class="col-md-6">
+               <div style="margin-bottom: 5px" class="card text-center bg-dark">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ owned_item.name }}</h5>
+                        <button type="button" class="btn btn-outline-danger" style="margin-bottom: 5px"
+                                data-toggle="modal" data-target="#Modal-SellingConfirm-{{ owned_item.id }}">
+                            Remove from Cart
+                        </button>
+                        <p class="card-text"><strong>
+                            This item costs {{ owned_item.price }} Rs.
+                        
+                        </strong></p>
+                    </div>
+                </div>
+           </div>
+         {% endfor %}
+      </div>
+      <form method="GET">
+         {{ form.hidden_tag() }}
+      {% set total_price = namespace(value=0) %}
+      
+      {% for i in owned_items %}
+      {% set total_price.value = total_price.value + i.price %}
+      {% endfor %}
+      
+      
+      <p>Total price: {{ total_price.value }}</p>
+   
+      <form method="POST">  <input type="hidden" id="total_price" name="total_price" value= "{{ total_price.value }}"> </form>
+      
+
+      <div style="text-align:center">
+         
+         {{buy_form.buy(class="btn btn-block btn-success")}} </div>
+   </form >
+      {% endif %}
+ </div>
+</div>
+{% endblock %}

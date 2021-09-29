@@ -1,0 +1,95 @@
+{%extends 'base.html'%}
+
+{%block title%}
+Market Page
+{%endblock%}
+{% block content%}
+
+
+<!-- <form action="/add_item" method="POST">
+    <div>
+        <label for="item">Enter Item: </label>
+        <input type="text" name="item" placeholder="Eg. Bananas...">
+        <br>
+     
+        <label for="price">Enter Price: </label>
+        <input type="text" name="price" placeholder="Eg. 10000">
+        <br>
+        <button type="submit">Add</button>
+    </div>
+</form>
+
+{% for item in todo %}
+<p>{{loop.index}} | {{item.name}} | {{item.price}} </p>
+
+{% if item.bought_item==False %}
+    <a href="/update_item/{{item.id}}">Add to cart</a>
+{% else %}
+    <a href="/update_item/{{item.id}}">Remove from cart</a>
+{% endif %}
+<a href="/delete_item/{{item.id}}">  Delete</a>
+
+{% endfor %} -->
+
+<h1 class="ui center aligned header" style="margin-left:400px;  font-size:25px ;color: rgb(240,78,81);">YOUR LIST</h1>
+
+<div style="
+float: left;
+height: 100%;
+width:500px" class="ui container">
+    
+    <form class="ui form" action="/add_item" method="post">
+        <div class="field">
+            <label style="color:rgb(33,135,145);height:20px ;font-size: 20px; Margin-bottom:5px">Enter Item:</label>
+            <br>
+            <input style="Margin-bottom:20px" style="height:20px" type="text" name="item" placeholder="Enter Todo...">
+            <label style="color:rgb(33,135,145) ;font-size: 20px; Margin-bottom:20px">Enter Price:</label>
+            <input type="text" name="price" style="height:40px" placeholder="Eg. 10000">
+            <br>
+        </div>
+        <button class="ui blue button" type="submit">Add</button>
+    </form>
+
+    <hr>
+    {% set total_price = namespace(value=0) %}
+    {% set count = namespace(value=0) %}
+    {% for item in todo%}
+    <div class="ui segment" style="height:90px">
+        <p class="ui big header" style="font-size:15px">{{ item.name }} | {{ item.price }}</p>
+
+        {% if item.bought_item==False  %}
+        <a class="ui blue button" href="/update_item/{{ item.id }}">Add to cart</a>
+        <a class="ui red button" href="/delete_item/{{ item.id }}">Delete</a>
+        
+        {% else %}
+        <a class="ui blue button" href="/update_item/{{ item.id }}">Remove from cart</a>
+        {% set total_price.value = total_price.value + item.price %}
+        {% set count.value = count.value + 1%}
+        
+        {% endif %}
+    
+      
+        
+
+
+ 
+
+</div>  
+{% endfor %}   
+
+</div>  
+   
+  
+<div  style="width: 500px; float: right; " class="center" >
+    <ul class="price">
+      <li class="header">Cart Stats</li>
+      
+      <li>Total Price: {{total_price.value}}</li>
+      <li>Total Items: {{ count.value }}</li>
+    </ul>
+  </div>
+
+
+
+
+{% endblock %}
