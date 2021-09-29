@@ -11,10 +11,42 @@ from flask_login import login_user, logout_user, login_required, current_user
 def home_page():
     return render_template('home.html')
 
+@app.route('/set_budget',methods=['GET','POST'])
+@login_required
+def set_budget():
+    form=SetBudgetForm()
+    if form.validate_on_submit():
+        current_user.add_budget(form.new_budget.data)
+        
+        
+        flash("RS. {} set as budget successfully ".format(form.new_budget.data), category='success')
+        
+        return redirect(url_for('set_budget'))
+    if(form.errors!={}):
+        for err in form.errors.values():
+            flash("There was an error {}".format(err),category='danger')
+    return render_template('set_budget.html',form=form)
+
+@app.route('/set_budget',methods=['GET','POST'])
+@login_required
+def set_budget():
+    form=SetBudgetForm()
+    if form.validate_on_submit():
+        current_user.add_budget(form.new_budget.data)
+        
+        
+        flash("RS. {} set as budget successfully ".format(form.new_budget.data), category='success')
+        
+        return redirect(url_for('set_budget'))
+    if(form.errors!={}):
+        for err in form.errors.values():
+            flash("There was an error {}".format(err),category='danger')
+    return render_template('set_budget.html',form=form)
+
 @app.route('/grocery', methods=['GET','POST'])
 @login_required
 def grocery_page():
-    purchase_form = PurchaseItemForm()
+    '''purchase_form = PurchaseItemForm()
     selling_form = SellItemForm()
     if request.method == "POST":
         # Purchase item logic
@@ -42,7 +74,66 @@ def grocery_page():
     if request.method == 'GET':
         items = Item.query.filter_by(owner=None)
         owned_items = Item.query.filter_by(owner=current_user.id)
-        return render_template('grocery.html', items=items, purchase_form=purchase_form, owned_items=owned_items, selling_form=selling_form)
+        return render_template('grocery.html', items=items, purchase_form=purchase_form, owned_items=owned_items, selling_form=selling_form)'''
+
+    
+    todo=Todo.query.all()
+    cart=Cart.query.all()
+    todo=Todo.query.filter_by(owner=current_user.id)
+    cart=Cart.query.filter_by(owner=current_user.id)
+       
+    return render_template('market2.html',todo=todo,cart=cart)
+
+@app.route('/add_item',methods=['GET','POST'])
+def add_item():
+    fname=request.form.get('item')
+    fprice=request.form.get('price')
+   
+    if(fname=="" or fprice==""):
+        flash('Item Name or price cannot be empty', category='danger')
+    
+    else:
+        if(fprice.isnumeric()):
+            new=Todo(name=fname, price=fprice, bought_item=False, owner=current_user.id)
+            db.session.add(new)
+            db.session.commit()
+            flash("{} Added successfully ".format(new.name), category='success')
+        else:
+             flash('Price must be an integer', category='danger')
+    
+    return redirect(url_for("market_page"))
+
+@app.route('/update_item/<int:todo_id>')
+def update_item(todo_id):
+    
+    todo=Todo.query.filter_by(id=todo_id).first()
+    
+    if(todo.bought_item==False):
+        if current_user.can_purchase(todo):
+            todo.buy(current_user)
+            c=Cart(name=todo.name, price=todo.price,owner=current_user.id)
+            db.session.add(c)
+            db.session.commit()
+            flash("YOU HAVE SUCCESSFULLY ADDED {} for {} Rs.".format(todo.name,todo.price),category='success')
+        else:
+                flash("YOU DONT HAVE ENOUGH MONEY, PLEASE SET NEW BUDGET ACCORDINGLY", category='danger')
+    else:
+        todo.sell(current_user)
+        
+    
+    
+    db.session.commit()
+    
+    return redirect(url_for("market_page"))
+
+@app.route('/delete_item/<int:todo_id>')
+def delete_item(todo_id):
+    todo=Todo.query.filter_by(id=todo_id).first()
+    
+    db.session.delete(todo)
+    db.session.commit()
+    
+    return redirect(url_for("market_page"))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
@@ -82,3 +173,6 @@ def logout_page():
     logout_user()
     flash("You have been logged out!", category='info')
     return redirect(url_for("home_page"))
+
+if __name__=="__main__":
+    app.run(debug=True) 
