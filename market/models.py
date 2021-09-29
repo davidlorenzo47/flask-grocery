@@ -39,6 +39,13 @@ class User(db.Model, UserMixin):
 
     def can_sell(self, item_obj):
         return item_obj in self.items
+    
+    def __repr__(self):
+        return "Item {}".format(self.username)
+    
+    def add_budget(self,amnt):
+        self.budget=int(amnt)
+        db.session.commit()
         
 class Item(db.Model):
     id = db.Column(db.Integer(), primary_key = True)
@@ -47,6 +54,7 @@ class Item(db.Model):
     barcode = db.Column(db.String(length = 12), nullable = False, unique = True)
     description = db.Column(db.String(length=1024), nullable = False, unique = True)
     owner = db.Column(db.Integer(), db.ForeignKey('user.id'))
+    bought_item=db.Column(db.Integer(),default=0)
 
     # def __repr___(self):
     #     return f'Item {self.name}'
@@ -56,9 +64,42 @@ class Item(db.Model):
     def buy(self, user):
         self.owner = user.id
         user.budget -= self.price
+        self.bought_item=self.price
         db.session.commit()
 
     def sell(self, user):
-        self.owner = None
+        self.bought_item=0
         user.budget += self.price
         db.session.commit()
+        
+ class Todo(db.Model):
+    id =db.Column(db.Integer(), primary_key=True,autoincrement=True)
+    name=db.Column(db.String(length=30),nullable=False,unique=False)
+    price=db.Column(db.Integer(),nullable=False)
+    owner=db.Column(db.Integer(),db.ForeignKey('user.id'))
+    bought_item=db.Column(db.Boolean)
+
+    
+    
+    def buy(self,user):
+                self.owner=user.id
+                user.budget-=self.price
+                self.bought_item=True
+                db.session.commit()
+    def sell(self,user):
+                self.bought_item=False
+                user.budget+=self.price
+                db.session.commit()
+    
+    
+    def __repr__(self):
+        return "Item {}".format(self.name)
+    
+    
+    
+class Cart(db.Model):
+    id =db.Column(db.Integer(), primary_key=True,autoincrement=True)
+    name=db.Column(db.String(length=30),nullable=False,unique=False)
+    price=db.Column(db.Integer(),nullable=False)
+    owner=db.Column(db.Integer(),db.ForeignKey('user.id'))
+    bought_item=db.Column(db.Boolean)
