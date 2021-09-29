@@ -24,12 +24,37 @@ class RegisterForm(FlaskForm):
 
 class LoginForm(FlaskForm):
 
-    username = StringField(label='User Name', validators=[DataRequired()])
-    password = StringField(label='Password', validators=[DataRequired()])
-    submit = SubmitField(label='Sign In') 
+    def validate_username(self,utc):
+        user=User.query.filter_by(username=utc.data).first()
+        if(not user):
+            raise ValidationError("Username doesn't exist")
 
+    
+    username=StringField(label='Username:',validators=[DataRequired()])
+    password=PasswordField(label='Password:',validators=[DataRequired()])
+    submit=SubmitField(label='Login')
+    
 class PurchaseItemForm(FlaskForm):
-    submit = SubmitField(label='Purchase Item!')
-
+    
+     submit=SubmitField(label="ADD TO CART !")
+     
+    
+    
 class SellItemForm(FlaskForm):
-    submit = SubmitField(label='Sell Item!')
+    
+     submit=SubmitField(label="REMOVE FROM CART !")
+     
+     
+class BuyForm(FlaskForm):
+    buy=SubmitField(label="BUY")
+    
+
+
+class AddItemForm(FlaskForm):
+    item_name=StringField(label="Item Name:",validators=[DataRequired()])
+    price=IntegerField(label="Price:",validators=[DataRequired()])
+    submit=SubmitField(label='ADD ITEM')
+    
+class SetBudgetForm(FlaskForm):
+    new_budget=IntegerField(label="New Budget:",validators=[DataRequired()])
+    submit=SubmitField(label='Set')
