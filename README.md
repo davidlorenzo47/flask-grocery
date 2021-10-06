@@ -19,7 +19,6 @@ https://grocery-flask.herokuapp.com/
 
 Feel free to contact me for any bugs/errors/imporvements
 
-<div style="margin-left: 30%;">
 <a href="https://www.linkedin.com/in/dhruvang-gondalia/">
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" width="5%" style="max-width: 100%;">
 </a> 
@@ -27,4 +26,3 @@ Feel free to contact me for any bugs/errors/imporvements
 <a href="https://twitter.com/davidlorenzo_47">
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/twitter/twitter-original.svg" width="5%" style="max-width: 100%;margin-left: 30%;">  
 </a>
-  </div>
