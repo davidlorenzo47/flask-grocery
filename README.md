@@ -17,7 +17,7 @@ https://grocery-flask.herokuapp.com/
 
 <img src="https://media.giphy.com/media/4tSHBpzJw7R3rrKUeo/giphy.gif" width="10%">
 
-Feel free to contact me for any bugs/errors/imporvements
+Feel free to contact me for any bugs/errors/improvements
 
 <a href="https://www.linkedin.com/in/dhruvang-gondalia/">
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" width="5%" style="max-width: 100%;">
